@@ -30,8 +30,9 @@ app.get("/",(req, res)=> {
     })
 })
 
-connectDB()
-
+connectDB().then(() => {
+    
 app.listen(PORT,()=>{
     console.log("Server is running",PORT)
+})
 })
