@@ -172,7 +172,7 @@ export async function logoutController(req, res) {
     res.clearCookie("refreshToken", cookiesOption)
 
     const removeRefreshToken = await UserModel.findByIdAndUpdate(userid,{
-      refresh_toke
+      refresh_token : ""
     })
 
     return res.json({
