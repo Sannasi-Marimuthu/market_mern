@@ -4,6 +4,7 @@ import bcryptjs from "bcryptjs";
 import verifyEmailTemplate from "../utils/verifyEmailTemplate.js";
 import generatedAccessToken from "../utils/generatedAccessToken.js";
 import generatedRefreshToken from "../utils/generatedRefreshToken.js";
+import uploadImageColudinary from "../utils/uploadImageColudinary.js";
 
 export async function registerUserController(req, res) {
   try {
@@ -184,6 +185,36 @@ export async function logoutController(req, res) {
     return res.status(500).json({
       message : error.message,
       error : true,
+      success : false
+    })
+  }
+}
+
+//upload user avatar
+
+export async function uploadAvatar(req,res) {
+  try {
+    const userId = req.userId //auth middleware
+    const image = req.file  // multer middleware
+    
+    const upload = await uploadImageColudinary(image)
+
+    const updateUser = await UserModel.findByIdAndUpdate(userId, {
+      avatar : upload.url
+    })
+
+    return res.json({
+      message : "upload profile",
+      data  : {
+        _id : userId,
+        avatar : upload.url
+      }
+    })
+
+  } catch (error) {
+    return res.status(500).json({
+      message : error.message || error,
+      error :  true,
       success : false
     })
   }
